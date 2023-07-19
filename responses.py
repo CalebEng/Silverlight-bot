@@ -24,6 +24,4 @@ def handle_response(msg) -> str:
     if pmsg == '!help':
         return 'I do things but idk what I do so deal wit it :)'
     
-
-    elif "silverlight" in pmsg:
-        return 'I dunno what to do wit dat one dere'
+    else: return ''
