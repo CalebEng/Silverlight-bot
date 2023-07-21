@@ -146,7 +146,25 @@ def run_dis_bot():
 
    
 
+    @client.tree.command(name = "cntowerkm", description= "Converts distance in KM to CN Towers pssstt...(This is for u Eunice)")
+    async def cnKM(Interaction, km: int):
+        name = Interaction.user.display_name
+        dis = (km*1000)/553
+        who = discord.Embed(title="Distance from KM to CN-Towers",description=f"{km} KM is:\n {dis} CN-Towers",colour=discord.Colour.purple())
+        who.set_thumbnail(url="https://w7.pngwing.com/pngs/197/465/png-transparent-cn-tower-coloring-book-drawing-line-art-cn-tower-silhouette-child-black-tower.png")
+        who.set_footer(text=f"{name} wanted this information")
 
+        await Interaction.response.send_message(embed = who)
+
+    @client.tree.command(name = "cntowerm", description="Converts distance in M to CN Towers pssstt...(This is for u Eunice)")
+    async def cnM(Interaction, m:int):
+        name = Interaction.user.display_name
+        dis = (m)/553
+        who = discord.Embed(title="Distance from KM to CN-Towers",description=f"{m} M is:\n {dis} CN-Towers",colour=discord.Colour.purple())
+        who.set_thumbnail(url="https://w7.pngwing.com/pngs/197/465/png-transparent-cn-tower-coloring-book-drawing-line-art-cn-tower-silhouette-child-black-tower.png")
+        who.set_footer(text=f"{name} wanted this information")
+
+        await Interaction.response.send_message(embed = who)
 
     @client.event
     async def on_message(message):

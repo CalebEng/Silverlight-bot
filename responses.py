@@ -9,7 +9,7 @@ def handle_response(msg) -> str:
 
     if pmsg == 'silverlight':
         responses =["Yes?","That's me!","Reporting for duty!", "Need somthing?"]
-        ans = random.randint(0,4)
+        ans = random.randint(0,3)
         return responses[ans]
     
     if pmsg == 'hello silverlight':
@@ -17,7 +17,7 @@ def handle_response(msg) -> str:
   
     if pmsg == 'how are you silverlight?'or pmsg =='how are u silverlight?'or pmsg =='how are you silverlight' or pmsg =='how are u silverlight': 
         responses =["I'm good!","doing fine","I'm ok", "Been better"]
-        ans = random.randint(0,4)
+        ans = random.randint(0,3)
         return responses[ans]
      
     
