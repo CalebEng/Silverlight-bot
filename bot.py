@@ -1,5 +1,6 @@
 import discord
 import responses
+import random
 from discord import app_commands
 from discord.ext import commands
 
@@ -165,11 +166,26 @@ def run_dis_bot():
     async def cnM(Interaction, m:int):
         name = Interaction.user.display_name
         dis = (m)/553
-        who = discord.Embed(title="Distance from KM to CN-Towers",description=f"{m} M is:\n {dis} CN-Towers",colour=discord.Colour.purple())
+        who = discord.Embed(title="Distance from M to CN-Towers",description=f"{m} M is:\n {dis} CN-Towers",colour=discord.Colour.purple())
         who.set_thumbnail(url="https://w7.pngwing.com/pngs/197/465/png-transparent-cn-tower-coloring-book-drawing-line-art-cn-tower-silhouette-child-black-tower.png")
         who.set_footer(text=f"{name} wanted this information")
 
         await Interaction.response.send_message(embed = who)
+
+    @client.tree.command(name = "coinflip",description="flips a coin")
+    async def coinFlip(Interaction):
+        name = Interaction.user.display_name
+        ans = random.randint(0,1)
+
+        if ans == 0:
+            await Interaction.response.send_message("Heads")
+        else:
+            await Interaction.response.send_message("Tails")
+
+    @client.tree.command(name = "roll",description="rolls a dice of n sides")
+    async def roll(Interaction,sides:int):
+        ans = random.randint(1,sides)
+        await Interaction.response.send_message(ans)
 
     '''
     ON any message inputed in any discord channel
