@@ -145,7 +145,9 @@ def run_dis_bot():
         await Interaction.response.send_message(embed= who)
 
    
-
+    '''
+    Takes in a number representing distance in KM and converts it to CN towers
+    '''
     @client.tree.command(name = "cntowerkm", description= "Converts distance in KM to CN Towers pssstt...(This is for u Eunice)")
     async def cnKM(Interaction, km: int):
         name = Interaction.user.display_name
@@ -156,6 +158,9 @@ def run_dis_bot():
 
         await Interaction.response.send_message(embed = who)
 
+    '''
+    Takes in a number representing distance in M and converts it to CN towers
+    '''
     @client.tree.command(name = "cntowerm", description="Converts distance in M to CN Towers pssstt...(This is for u Eunice)")
     async def cnM(Interaction, m:int):
         name = Interaction.user.display_name
@@ -166,6 +171,9 @@ def run_dis_bot():
 
         await Interaction.response.send_message(embed = who)
 
+    '''
+    ON any message inputed in any discord channel
+    '''
     @client.event
     async def on_message(message):
         if message.author == client.user:
