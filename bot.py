@@ -54,7 +54,10 @@ def run_dis_bot():
 
             for act in member.activities:
                 if act.type == discord.ActivityType.listening:
-                    listening = act.name
+                    if act.name == "Spotify":
+                        listening = act.title
+                        
+                    else: listening = act.name
                 if act.type == discord.ActivityType.watching:
                     watching = act.name
                 if isinstance(act, discord.CustomActivity):
@@ -65,6 +68,10 @@ def run_dis_bot():
                     streaming = act
                 if act.type == discord.ActivityType.competing: 
                     activity = act.name
+
+
+            
+
 
             
             for role in member.roles[1:]:
@@ -97,6 +104,47 @@ def run_dis_bot():
             
 
 
+    #testing getting information about a song (Spotify)
+    @client.command(name = "song")
+    async def song(Interaction, member:discord.Member = None):
+        if member == None:
+            member = Interaction.message.author
+        
+        activ = None
+        for act in member.activities:
+                if act.type == discord.ActivityType.listening:
+                    if act.name == "Spotify":
+                        activ = act
+                        songName = activ.title
+                        artist = activ.artist
+                        artists = activ.artists
+                        pfp = activ.album_cover_url
+                        album = activ.album
+                        trackurl = activ.track_url
+
+
+                        emb = discord.Embed(title=f"{member.display_name} is listening to: ", description=songName,colour = discord.Colour.random())
+                        emb.set_author(name="Click to listen along!",url=trackurl)
+                        emb.set_thumbnail(url=pfp)
+                        
+                        emb.add_field(name = "Artist: ",value = artist,inline = False)
+                        emb.add_field(name = "Multi Artist",value = artists,inline = True)
+                        emb.add_field(name = "Album: ",value = album, inline = False)
+
+                        emb.set_footer(test = f"{Interaction.message.author.display_name} wanted this information")
+
+                        await Interaction.send(embed = emb)
+                    else: await Interaction.send("No song found")
+               
+        
+
+
+        
+
+
+
+
+
 
     #testing slash commands
     @client.tree.command(name = "test", description= "testing")
@@ -104,6 +152,14 @@ def run_dis_bot():
         await interaction.response.send_message("test working")
         print("Ready!")
 
+
+    @client.tree.command(name="complement", description="complement plz")
+    async def comp(Interaction, member:discord.Member = None):
+        if member == None:
+            member = Interaction.user
+        emb = discord.Embed(title="Complement from Silverlight", description = f"Ur an idiot {member.display_name} :)")
+        await Interaction.response.send_message(embed = emb)    
+        
     #testing profile slash command
     @client.tree.command(name = "info", description= "Who are you")
     async def info(Interaction, member:discord.Member = None):
