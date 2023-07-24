@@ -29,78 +29,80 @@ def run_dis_bot():
     @client.event
     async def on_ready():
         await client.tree.sync()
-        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.competing,name = 'life'))
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening,name = 'you'))
         print(f'{client.user} has arived!')
+    
+    @client.event
+    async def on_command_error(Interaction, error):
+        if isinstance(error, commands.errors.MemberNotFound):
+            return await Interaction.send("User not found!")
 
 
     #testing non slash profile command
     @client.command(name = 'info')
     async def info(Interaction, member:discord.Member = None):
-        try:
-            if member == None:
-                member = Interaction.message.author 
         
-            name = member.display_name
-            pfp = member.display_avatar
-            des = ''
-            stat = member.status
-            activity=None
-            playing=None
-            streaming = None
-            cusAct = None
-            listening = None
-            watching = None
+        if member == None:
+            member = Interaction.message.author 
+    
+        name = member.display_name
+        pfp = member.display_avatar
+        des = ''
+        stat = member.status
+        activity=None
+        playing=None
+        streaming = None
+        cusAct = None
+        listening = None
+        watching = None
 
 
-            for act in member.activities:
-                if act.type == discord.ActivityType.listening:
-                    if act.name == "Spotify":
-                        listening = act.title
-                        
-                    else: listening = act.name
-                if act.type == discord.ActivityType.watching:
-                    watching = act.name
-                if isinstance(act, discord.CustomActivity):
-                    cusAct = act
-                if isinstance(act, discord.Game):
-                    playing = act
-                if isinstance(act, discord.Streaming):
-                    streaming = act
-                if act.type == discord.ActivityType.competing: 
-                    activity = act.name
+        for act in member.activities:
+            if act.type == discord.ActivityType.listening:
+                if act.name == "Spotify":
+                    listening = act.title
+                    
+                else: listening = act.name
+            if act.type == discord.ActivityType.watching:
+                watching = act.name
+            if isinstance(act, discord.CustomActivity):
+                cusAct = act
+            if isinstance(act, discord.Game):
+                playing = act
+            if isinstance(act, discord.Streaming):
+                streaming = act
+            if act.type == discord.ActivityType.competing: 
+                activity = act.name
 
 
-            
-
-
-            
-            for role in member.roles[1:]:
-                des+=f'{role.name}, '
-            des=des[:-2]
-
-            
-            who = discord.Embed(title=f"{name}", description=stat,colour=discord.Colour.random())
-            who.set_author(name="Created by Silverlight",url="https://github.com/CalebEng",icon_url="https://avatars.githubusercontent.com/u/121829627?v=4")
-            who.set_thumbnail(url=f"{pfp}")
-            
-            who.add_field(name= "Custom Status: ", value = cusAct,inline = False)
-            
-            who.add_field(name = "Playing: ", value = playing, inline=True)
-            who.add_field(name = "Streaming: ", value= streaming, inline= True)
-            who.add_field(name= "Watching: ",value=watching,inline=True)
-            who.add_field(name = "Competing in: ", value = activity, inline=True)
-            who.add_field(name= "Listening to: ",value=listening,inline=True)
-            
-            
-            who.add_field(name="Roles: ",value=des,inline= False)
-
-            who.set_footer(text=f"{Interaction.message.author.display_name} wanted this information" )
         
-            await Interaction.send(embed= who)
-        except ValueError:
-            raise commands.MemberNotFound(member)
-            embed = discord.Embed(title='OOPS',description='Couldnt find the person you were looking for',colour= 0xf461ff)
-            await Interaction.send(embed)
+
+
+        
+        for role in member.roles[1:]:
+            des+=f'{role.name}, '
+        des=des[:-2]
+
+        
+        who = discord.Embed(title=f"{name}", description=stat,colour=discord.Colour.random())
+        who.set_author(name="Created by Silverlight",url="https://github.com/CalebEng",icon_url="https://avatars.githubusercontent.com/u/121829627?v=4")
+        who.set_thumbnail(url=f"{pfp}")
+        
+        who.add_field(name= "Custom Status: ", value = cusAct,inline = False)
+        
+        who.add_field(name = "Playing: ", value = playing, inline=True)
+        who.add_field(name = "Streaming: ", value= streaming, inline= True)
+        who.add_field(name= "Watching: ",value=watching,inline=True)
+        who.add_field(name = "Competing in: ", value = activity, inline=True)
+        who.add_field(name= "Listening to: ",value=listening,inline=True)
+        
+        
+        who.add_field(name="Roles: ",value=des,inline= False)
+
+        who.set_footer(text=f"{Interaction.message.author.display_name} wanted this information" )
+    
+        await Interaction.send(embed= who)
+
             
 
 
@@ -109,42 +111,37 @@ def run_dis_bot():
     async def song(Interaction, member:discord.Member = None):
         if member == None:
             member = Interaction.message.author
+        check =0
         
         activ = None
         for act in member.activities:
                 if act.type == discord.ActivityType.listening:
+                    check+=1
                     if act.name == "Spotify":
                         activ = act
                         songName = activ.title
-                        artist = activ.artist
-                        artists = activ.artists
+                        artists = ""
                         pfp = activ.album_cover_url
                         album = activ.album
                         trackurl = activ.track_url
 
-
+                        for art in activ.artists:
+                            artists+=f"{art}, "
+                        artists=artists[:-2]
                         emb = discord.Embed(title=f"{member.display_name} is listening to: ", description=songName,colour = discord.Colour.random())
                         emb.set_author(name="Click to listen along!",url=trackurl)
                         emb.set_thumbnail(url=pfp)
                         
-                        emb.add_field(name = "Artist: ",value = artist,inline = False)
-                        emb.add_field(name = "Multi Artist",value = artists,inline = True)
+                        emb.add_field(name = "Artist(s): ",value = artists,inline = True)
                         emb.add_field(name = "Album: ",value = album, inline = False)
 
-                        emb.set_footer(test = f"{Interaction.message.author.display_name} wanted this information")
+                        emb.set_footer(text = f"{Interaction.message.author.display_name} wanted this information")
 
                         await Interaction.send(embed = emb)
-                    else: await Interaction.send("No song found")
-               
-        
-
-
-        
-
-
-
-
-
+                    else: 
+                        await Interaction.send(f"Song: {act.name}")
+        if check ==0:
+            await Interaction.send("No song found")
 
     #testing slash commands
     @client.tree.command(name = "test", description= "testing")

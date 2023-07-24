@@ -12,7 +12,7 @@ def handle_response(msg) -> str:
         ans = random.randint(0,3)
         return responses[ans]
     
-    if pmsg == 'hello silverlight':
+    if pmsg == 'hello silverlight' or pmsg == 'hi silverlight':
         return "Hello!"
   
     if pmsg == 'how are you silverlight?'or pmsg =='how are u silverlight?'or pmsg =='how are you silverlight' or pmsg =='how are u silverlight': 
