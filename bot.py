@@ -1,5 +1,6 @@
 import discord
 import responses
+import Buttons
 import random
 from discord import app_commands
 from discord.ext import commands
@@ -143,13 +144,6 @@ def run_dis_bot():
         if check ==0:
             await Interaction.send("No song found")
 
-    #testing slash commands
-    @client.tree.command(name = "test", description= "testing")
-    async def test_command(interaction):
-        await interaction.response.send_message("test working")
-        print("Ready!")
-
-
     @client.tree.command(name="complement", description="complement plz")
     async def comp(Interaction, member:discord.Member = None):
         if member == None:
@@ -239,6 +233,14 @@ def run_dis_bot():
     async def roll(Interaction,sides:int):
         ans = random.randint(1,sides)
         await Interaction.response.send_message(ans)
+
+
+    @client.tree.command(name="testb")
+    async def testb(Interaction):
+        await Interaction.response.send_message(content="This is a test for buttons",view = Buttons.Buttons())
+
+    
+   
 
     '''
     ON any message inputed in any discord channel
