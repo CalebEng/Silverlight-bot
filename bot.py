@@ -1,6 +1,6 @@
 import discord
 import responses
-import Buttons
+import TicTac
 import random
 from discord import app_commands
 from discord.ext import commands
@@ -235,9 +235,11 @@ def run_dis_bot():
         await Interaction.response.send_message(ans)
 
 
-    @client.tree.command(name="testb")
-    async def testb(Interaction):
-        await Interaction.response.send_message(content="This is a test for buttons",view = Buttons.Buttons())
+    @client.tree.command(name="tic-tac-toe")
+    async def tictactoe(Interaction,member:discord.Member):
+        view = TicTac.TicTac(Interaction.user.display_name,member.display_name)
+        emb = discord.Embed(title=f"{Interaction.user.display_name} has challenged {member.display_name} to tic tac toe!" )
+        await Interaction.response.send_message(embed=emb,view = view)
 
     
    
