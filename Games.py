@@ -5,7 +5,6 @@ import random
 
 
 async def tictac(self,Interaction,name,button):
-
     win =0
     done = False
     v=self.board

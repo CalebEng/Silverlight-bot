@@ -11,7 +11,10 @@ class TicTac(discord.ui.View):
         self.p2T=False
         self.turn = True
         self.board = [[0,0,0],[0,0,0,],[0,0,0]]
-    
+        
+
+#tic tac toe grid buttons
+#------------------------------------------------------------------------------------    
     @discord.ui.button(label="_",style=discord.ButtonStyle.grey)
     async def ul(self, Interaction, button):
         name = Interaction.user.display_name
@@ -110,6 +113,7 @@ class TicTac(discord.ui.View):
             self.board[2][2]-=1
 
         await Games.tictac(self,Interaction,name)
+#------------------------------------------------------------------------------------  
 
     #Surrender button
     @discord.ui.button(label="Surrender",style=discord.ButtonStyle.danger,row =3)
@@ -122,7 +126,7 @@ class TicTac(discord.ui.View):
             await Games.qu(self, Interaction,name,self.pl1)
         else:
             await Interaction.response.send_message(f"{name} that is not allowed!")
-
+    #tie button
     @discord.ui.button(label="TIE", style= discord.ButtonStyle.danger,row = 3)
     async def ti(self,Interaction,button):
         name = Interaction.user.display_name
