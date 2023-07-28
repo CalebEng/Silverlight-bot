@@ -56,8 +56,10 @@ def run_dis_bot():
         cusAct = None
         listening = None
         watching = None
+        badges = member.public_flags.all()
 
-
+        print(badges)
+        
         for act in member.activities:
             if act.type == discord.ActivityType.listening:
                 if act.name == "Spotify":
@@ -75,16 +77,11 @@ def run_dis_bot():
             if act.type == discord.ActivityType.competing: 
                 activity = act.name
 
-
-        
-
-
-        
         for role in member.roles[1:]:
             des+=f'{role.name}, '
         des=des[:-2]
 
-        
+                
         who = discord.Embed(title=f"{name}", description=stat,colour=discord.Colour.random())
         who.set_author(name="Created by Silverlight",url="https://github.com/CalebEng",icon_url="https://avatars.githubusercontent.com/u/121829627?v=4")
         who.set_thumbnail(url=f"{pfp}")
