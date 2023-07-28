@@ -7,6 +7,8 @@ class TicTac(discord.ui.View):
         super().__init__(timeout=None)
         self.pl1=p1
         self.pl2=p2
+        self.p1T=False
+        self.p2T=False
         self.turn = True
         self.board = [[0,0,0],[0,0,0,],[0,0,0]]
     
@@ -108,3 +110,28 @@ class TicTac(discord.ui.View):
             self.board[2][2]-=1
 
         await Games.tictac(self,Interaction,name)
+
+    #Surrender button
+    @discord.ui.button(label="Surrender",style=discord.ButtonStyle.danger,row =3)
+    async def qu(self,Interaction, button):
+        name = Interaction.user.display_name
+
+        if name == self.pl1:
+            await Games.qu(self,Interaction,name,self.pl2)
+        elif name == self.pl2:
+            await Games.qu(self, Interaction,name,self.pl1)
+        else:
+            await Interaction.response.send_message(f"{name} that is not allowed!")
+
+    @discord.ui.button(label="TIE", style= discord.ButtonStyle.danger,row = 3)
+    async def ti(self,Interaction,button):
+        name = Interaction.user.display_name
+
+        if name == self.pl1:
+            self.p1T = True
+            await Games.tie(self,Interaction,name)
+        elif name == self.pl2:
+            self.p2T = True
+            await Games.tie(self, Interaction,name)
+        else:
+            await Interaction.response.send_message(f"{name} that is not allowed!")
