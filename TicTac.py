@@ -10,7 +10,7 @@ class TicTac(discord.ui.View):
         self.p1T=False
         self.p2T=False
         self.turn = True
-        self.board = [[0,0,0],[0,0,0,],[0,0,0]]
+        self.board = [[0,0,0],[0,0,0],[0,0,0]]
         
 
 #tic tac toe grid buttons
@@ -35,7 +35,7 @@ class TicTac(discord.ui.View):
         elif name == self.pl2 and not self.turn:
             self.board[0][1]-=1
 
-        await Games.tictac(self,Interaction,name)
+        await Games.tictac(self, Interaction, name, button)
 
     @discord.ui.button(label="_",style=discord.ButtonStyle.grey)
     async def ur(self, Interaction, button):
@@ -46,7 +46,7 @@ class TicTac(discord.ui.View):
         elif name == self.pl2 and not self.turn:
             self.board[0][2]-=1
 
-        await Games.tictac(self,Interaction,name)
+        await Games.tictac(self, Interaction, name, button)
   
     @discord.ui.button(label="_",style=discord.ButtonStyle.grey,row = 1)
     async def ml(self, Interaction, button):
@@ -57,7 +57,7 @@ class TicTac(discord.ui.View):
         elif name == self.pl2 and not self.turn:
             self.board[1][0]-=1
 
-        await Games.tictac(self,Interaction,name)
+        await Games.tictac(self, Interaction, name, button)
 
     @discord.ui.button(label="_",style=discord.ButtonStyle.grey,row = 1)
     async def mm(self, Interaction, button):
@@ -68,7 +68,7 @@ class TicTac(discord.ui.View):
         elif name == self.pl2 and not self.turn:
             self.board[1][1]-=1
 
-        await Games.tictac(self,Interaction,name)
+        await Games.tictac(self, Interaction, name, button)
    
     @discord.ui.button(label="_",style=discord.ButtonStyle.grey,row=1)
     async def mr(self, Interaction, button):
@@ -79,7 +79,7 @@ class TicTac(discord.ui.View):
         elif name == self.pl2 and not self.turn:
             self.board[1][2]-=1
 
-        await Games.tictac(self,Interaction,name)
+        await Games.tictac(self, Interaction, name, button)
     
     @discord.ui.button(label="_",style=discord.ButtonStyle.grey,row=2)
     async def ll(self, Interaction, button):
@@ -90,7 +90,7 @@ class TicTac(discord.ui.View):
         elif name == self.pl2 and not self.turn:
             self.board[2][0]-=1
 
-        await Games.tictac(self,Interaction,name)
+        await Games.tictac(self, Interaction, name, button)
 
     @discord.ui.button(label="_",style=discord.ButtonStyle.grey,row = 2)
     async def lm(self, Interaction, button):
@@ -101,7 +101,7 @@ class TicTac(discord.ui.View):
         elif name == self.pl2 and not self.turn:
             self.board[2][1]-=1
 
-        await Games.tictac(self,Interaction,name)
+        await Games.tictac(self, Interaction, name, button)
    
     @discord.ui.button(label="_",style=discord.ButtonStyle.grey,row=2)
     async def lr(self, Interaction, button):
@@ -112,7 +112,7 @@ class TicTac(discord.ui.View):
         elif name == self.pl2 and not self.turn:
             self.board[2][2]-=1
 
-        await Games.tictac(self,Interaction,name)
+        await Games.tictac(self, Interaction, name, button)
 #------------------------------------------------------------------------------------  
 
     #Surrender button
