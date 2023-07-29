@@ -1,6 +1,7 @@
 import discord
 import responses
 import TicTac
+import Hangman
 import random
 from discord import app_commands
 from discord.ext import commands
@@ -231,16 +232,27 @@ def run_dis_bot():
         ans = random.randint(1,sides)
         await Interaction.response.send_message(ans)
 
-
+#games---------------------------------------------------------------------------------------------
     @client.tree.command(name="tic-tac-toe")
     async def tictactoe(Interaction,member:discord.Member):
         view = TicTac.TicTac(Interaction.user.display_name,member.display_name)
         emb = discord.Embed(title=f"{Interaction.user.display_name} has challenged {member.display_name} to tic tac toe!" )
         await Interaction.response.send_message(embed=emb,view = view)
 
+    @client.tree.command(name= "hangman",description="There are no word containing z cuz discord wouldn't let me have more than 25 buttons deal wit it")
+    async def hangman(Interaction):
+        bank = []
+        with open (r'C:\Users\caleb\OneDrive\Documents\Programing\Personal\Python codes\Silverlight bot\wordlist.txt', 'r') as f:
+            for row in f:
+                bank.append(row[:-1])
+        temp = random.choice(bank)
+        hidden = '#'*len(temp)
+        view = Hangman.Hangman(temp,hidden)
+        emb = discord.Embed(title = f"Word: {hidden}",description=f'Chances left: 7 | length: {len(hidden)}')
+        await Interaction.response.send_message(embed=emb,view=view)
     
    
-
+#--------------------------------------------------------------------------------------------------
     '''
     ON any message inputed in any discord channel
     '''

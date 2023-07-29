@@ -63,6 +63,49 @@ async def tictac(self,Interaction,name,button):
         else:
             await Interaction.response.send_message(f"{name} that is not allowed!")
 
+
+#hangman!
+async def hangman(self,Interaction,name,button,guess):
+    #if the letter is in the word
+    if (guess in self.word):
+        button.disabled = True
+        button.style = discord.ButtonStyle.success
+        for i in range(len(self.word)):
+            if self.word[i] == guess:
+                self.hidden= self.hidden[:i]+guess+self.hidden[i+1:]
+        if self.hidden.count('+')==0:
+            x = discord.Embed(title=f"Word guessed correctly!",description=f'Word: {self.word}')
+            await Interaction.response.edit_message(embed=x,view = None)
+        else:
+            x = discord.Embed(title = f"Word: {self.hidden}",description=f'Chances left: {7-self.guesses} | length: {len(self.hidden)}')
+            await Interaction.response.edit_message(embed=x,view =self)
+    #letter not in the word
+    else:
+        button.disabled = True
+        button.style = discord.ButtonStyle.danger
+        self.guesses +=1
+        if self.guesses ==7:
+            x = discord.Embed(title=f"THE MAN HAS BEEN HUNG!")
+            await Interaction.response.edit_message(embed = x,view = None)
+        else:
+            x = discord.Embed(title = f"Word: {self.hidden}",description=f'Chances left: {7-self.guesses} | length: {len(self.hidden)}')
+            await Interaction.response.edit_message(embed = x,view = self)
+    #if out of guesses
+    
+
+
+
+
+
+#getting the words for hangman
+async def getList(self):
+    bank = []
+    with open (r'C:\Users\caleb\OneDrive\Documents\Programing\Personal\Python codes\Silverlight bot\wordlist.txt', 'r') as f:
+        for row in f:
+            bank.append(row[:-1])
+    temp = random.choice(bank)
+    return temp
+
 #player surrenders
 async def qu(self,Interaction,name,winner):
     x = discord.Embed(title=f"{name} has surrendered!", description=f"{winner} WINS!"  )
