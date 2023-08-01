@@ -58,8 +58,12 @@ def run_dis_bot():
         listening = None
         watching = None
         badges = member.public_flags.all()
+        badgeStr = ""
 
-        print(badges)
+        for i in badges:
+            badgeStr+=f"{str(i)[10:].replace('_',' ')}, "
+            
+        badgeStr=badgeStr[:-2]
         
         for act in member.activities:
             if act.type == discord.ActivityType.listening:
@@ -81,14 +85,14 @@ def run_dis_bot():
         for role in member.roles[1:]:
             des+=f'{role.name}, '
         des=des[:-2]
-
+ 
                 
         who = discord.Embed(title=f"{name}", description=stat,colour=discord.Colour.random())
         who.set_author(name="Created by Silverlight",url="https://github.com/CalebEng",icon_url="https://avatars.githubusercontent.com/u/121829627?v=4")
         who.set_thumbnail(url=f"{pfp}")
         
         who.add_field(name= "Custom Status: ", value = cusAct,inline = False)
-        
+        who.add_field(name= "Badges: ",value = badgeStr,inline = False)
         who.add_field(name = "Playing: ", value = playing, inline=True)
         who.add_field(name = "Streaming: ", value= streaming, inline= True)
         who.add_field(name= "Watching: ",value=watching,inline=True)

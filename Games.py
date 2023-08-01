@@ -73,7 +73,7 @@ async def hangman(self,Interaction,name,button,guess):
         for i in range(len(self.word)):
             if self.word[i] == guess:
                 self.hidden= self.hidden[:i]+guess+self.hidden[i+1:]
-        if self.hidden.count('+')==0:
+        if self.hidden.count('#')==0:
             x = discord.Embed(title=f"Word guessed correctly!",description=f'Word: {self.word}')
             await Interaction.response.edit_message(embed=x,view = None)
         else:
