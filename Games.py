@@ -85,7 +85,7 @@ async def hangman(self,Interaction,name,button,guess):
         button.style = discord.ButtonStyle.danger
         self.guesses +=1
         if self.guesses ==7:
-            x = discord.Embed(title=f"THE MAN HAS BEEN HUNG!")
+            x = discord.Embed(title=f"THE MAN HAS BEEN HUNG!",description=self.word)
             await Interaction.response.edit_message(embed = x,view = None)
         else:
             x = discord.Embed(title = f"Word: {self.hidden}",description=f'Chances left: {7-self.guesses} | length: {len(self.hidden)}')

@@ -3,6 +3,7 @@ import responses
 import TicTac
 import Hangman
 import random
+import Poet
 from discord import app_commands
 from discord.ext import commands
 
@@ -243,7 +244,7 @@ def run_dis_bot():
         emb = discord.Embed(title=f"{Interaction.user.display_name} has challenged {member.display_name} to tic tac toe!" )
         await Interaction.response.send_message(embed=emb,view = view)
 
-    @client.tree.command(name= "hangman",description="There are no word containing z cuz discord wouldn't let me have more than 25 buttons deal wit it")
+    @client.tree.command(name= "hangman",description="There are no words containing z cuz discord wouldn't let me have more than 25 buttons, deal wit it")
     async def hangman(Interaction):
         bank = []
         with open (r'C:\Users\caleb\OneDrive\Documents\Programing\Personal\Python codes\Silverlight bot\wordlist.txt', 'r') as f:
@@ -255,8 +256,25 @@ def run_dis_bot():
         emb = discord.Embed(title = f"Word: {hidden}",description=f'Chances left: 7 | length: {len(hidden)}')
         await Interaction.response.send_message(embed=emb,view=view)
     
-   
+    @client.tree.command(name ="pokemon")
+    async def pokemon(Interaction):
+        pass
 #--------------------------------------------------------------------------------------------------
+#poet
+    @client.tree.command(name = "poet")
+    async def poet(Interaction, start: str):
+        opener = start
+        
+        await Poet.generatePoem(Interaction, opener)
+
+
+
+
+
+
+
+
+
     '''
     ON any message inputed in any discord channel
     '''
