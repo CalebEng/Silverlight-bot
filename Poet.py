@@ -2,10 +2,10 @@ import tensorflow as tf
 import numpy as np
 import discord 
 
+from tensorflow import keras
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import Tokenizer
 
-from tensorflow import keras
 
 
 async def generatePoem(Interaction, opener):
@@ -35,7 +35,7 @@ async def generatePoem(Interaction, opener):
 
     seed_text = opener
     next_words = 20
-
+    await Interaction.response.defer()
     for i in range(next_words):
         token_list = tokenizer.texts_to_sequences([seed_text])[0]
         token_list = pad_sequences([token_list], maxlen=max_sequence_len-1, padding='pre')
@@ -56,4 +56,6 @@ async def generatePoem(Interaction, opener):
             seed_text = seed_text[:i] + '\n' + seed_text[(i+1):]
     seed_text+="\n~Silverlight"
 
-    await Interaction.response.send_message(f"{seed_text} ")
+    
+    await Interaction.followup.send(f"{seed_text} ")
+    
