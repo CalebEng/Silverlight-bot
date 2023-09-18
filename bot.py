@@ -19,7 +19,7 @@ async def sendMSG(message, user_message, is_private):
 
 
 def run_dis_bot():
-    f=open(r'C:\Users\caleb\OneDrive\Documents\Programing\Personal\Python codes\info.txt')
+    f=open(r'C:\Users\caleb\Programing\Personal\Python codes\info.txt')
     TOKEN = f.read()
     f.close()
     intents=discord.Intents.all()
