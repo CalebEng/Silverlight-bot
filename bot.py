@@ -247,7 +247,7 @@ def run_dis_bot():
     @client.tree.command(name= "hangman",description="There are no words containing z cuz discord wouldn't let me have more than 25 buttons, deal wit it")
     async def hangman(Interaction):
         bank = []
-        with open (r'C:\Users\caleb\OneDrive\Documents\Programing\Personal\Python codes\Silverlight bot\wordlist.txt', 'r') as f:
+        with open (r'C:\Users\caleb\Programing\Personal\Python codes\Silverlight bot\wordlist.txt', 'r') as f:
             for row in f:
                 bank.append(row[:-1])
         temp = random.choice(bank)
