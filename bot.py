@@ -1,13 +1,15 @@
 import discord
+import Character
 import responses
 import TicTac
 import Hangman
 import random
 import Poet
+import Player
 from discord import app_commands
 from discord.ext import commands
 
-
+chars=[Player.player(0,0,0,0,0,0,0,0,0,0,0,0)]
 
 async def sendMSG(message, user_message, is_private):
     try:
@@ -256,9 +258,182 @@ def run_dis_bot():
         emb = discord.Embed(title = f"Word: {hidden}",description=f'Chances left: 7 | length: {len(hidden)}')
         await Interaction.response.send_message(embed=emb,view=view)
     
-    @client.tree.command(name ="pokemon")
-    async def pokemon(Interaction):
-        pass
+
+    @client.tree.command(name ="dnd",description="Create characters")
+    async def dnd(Interaction,players:int):
+        with open(r'characters.txt','r') as f:
+                stats =0
+                num=0
+                for row in f:
+                    temp = row.split()
+                    if stats==12:
+                        chars.append(Player.player(0,0,0,0,0,0,0,0,0,0,0,0))
+                        stats =0
+                        num+=1
+                    if(stats ==0):
+                        chars[num].id=int(temp[1])
+                        
+                    if(stats ==1):
+                        chars[num].name=temp[1]
+                        
+                    if(stats ==2):
+                        chars[num].hp=int(temp[1])
+                        
+                    if(stats ==3):
+                        chars[num].max=int(temp[1])
+                        
+                    if(stats ==4):
+                        chars[num].agil=int(temp[1])
+                        
+                    if(stats ==5):
+                        chars[num].str=int(temp[1])
+                        
+                    if(stats ==6):
+                        chars[num].fine=int(temp[1])
+                        
+                    if(stats ==7):
+                        chars[num].inst=int(temp[1])
+                        
+                    if(stats ==8):
+                        chars[num].pres=int(temp[1])
+                        
+                    if(stats ==9):
+                        chars[num].know=int(temp[1])
+                        
+                    if(stats ==10):
+                        chars[num].evas =int(temp[1])
+                    
+                    if(stats==11):
+                        chars[num].feat = temp[1]
+                        
+                    stats+=1
+        await Interaction.response.send_message("Characters created!")
+                    
+
+
+   #display stats and give options
+    @client.tree.command(name ="character")
+    async def character(Interaction):
+        pChar = None
+        check  = False
+        for i in chars:
+            if Interaction.user.id == i.id:
+                check =True
+                pChar =i
+        if check == True:
+            #view = Character.Character(596818504154611741,Interaction.user.id)
+            emb = discord.Embed(title =pChar.name,description="Feat: "+pChar.feat,colour=discord.Colour.random())
+            emb.set_thumbnail(url=Interaction.user.display_avatar)
+            emb.add_field(name ="HP", value =str(pChar.hp)+" / "+str(pChar.max),inline = False)
+            emb.add_field(name ="Agility",value = pChar.agil, inline=True)
+            emb.add_field(name="Strength", value = pChar.str,inline=True)
+            emb.add_field(name="Finesse", value = pChar.fine,inline=True)
+            emb.add_field(name="Instinct", value = pChar.inst,inline=True)
+            emb.add_field(name="Presence", value = pChar.pres,inline=True)
+            emb.add_field(name="Knowledge", value = pChar.know,inline=True)
+            emb.add_field(name="Evasion", value = pChar.evas,inline=False)
+            
+
+            await Interaction.response.send_message(embed=emb)
+
+        else:
+            await Interaction.response.send_message("You have no character")
+
+        
+    @client.tree.command(name ="roll_dnd",description="Roll the dice")
+    async def roll_dnd(Interaction):
+        hope = random.randint(1,12)
+        fear = random.randint(1,12)
+        r1 = hope+fear
+        r1c=""
+        
+        if hope==fear:
+            r1c="CRITICAL: "
+
+        hope2 = random.randint(1,12)
+        fear2 = random.randint(1,12)
+        r2 = hope2+fear2
+        r2c=""
+
+        if hope2==fear2:
+            r2c="CRITICAL: "
+        
+        x="hope"
+        y="hope"
+
+        if hope<fear:
+            x="fear"
+        if hope2<fear2:
+            y="fear"
+
+        multi=[[r1,r2],[x,y],[r1c,r2c]]
+        if r1>r2:
+            multi[0][0]=r2 
+            multi[0][1]=r1
+            multi[1][0]= y
+            multi[1][1]=x     
+            multi[2][0]=r2c
+            multi[2][1]=r1c            
+
+        emb = discord.Embed(title="ROLLS:")
+        emb.add_field(name ="Normal", value =r1c+ str(r1)+" with "+x)
+        if(not multi[2][0]=="CRITICAL: "):
+            emb.add_field(name = "Advantage",value=multi[2][1]+str(multi[0][1])+" with "+multi[1][1])
+            emb.add_field(name = "Disadvantage",value=multi[2][0]+str(multi[0][0])+" with "+multi[1][0])
+        else:
+            emb.add_field(name = "Advantage",value=multi[2][0]+str(multi[0][0])+" with "+multi[1][0])
+            emb.add_field(name = "Disadvantage",value=multi[2][1]+str(multi[0][1])+" with "+multi[1][1])
+        
+        
+
+        await Interaction.response.send_message(embed=emb)
+
+    @client.tree.command(name ="damage",description="hit damage")
+    async def damage(Interaction,dmg:int,member:discord.Member):
+        id=member.id
+        temp ="There is no character registered for: "+member.display_name
+        for i in chars:
+            if int(id) == i.id:
+                if(i.hp-dmg == -i.max and i.hp>=0):
+                    i.hp=-3
+                    temp =i.name+" has died!"
+                elif(i.hp>0 and i.hp-dmg<=0):
+                    i.hp=0 
+                    temp =i.name+" has fallen!"
+                elif(i.hp<=0 and i.hp>=-3):
+                    i.hp-=2
+                    temp =i.name+" fails 2 death saves!"          
+                else:
+                    i.hp-=dmg
+                    temp =i.name+" has taken "+str(dmg)+" points of damage!"
+
+        await Interaction.response.send_message(temp)
+    
+    @client.tree.command(name ="heal",description="heal damage")
+    async def heal(Interaction,heal:int,member:discord.Member):
+        id = member.id
+        temp ="There is no character registered for: "+member.display_name
+    
+
+        for i in chars:
+            if int(id) == i.id:
+                if(i.hp<=0 and i.hp>-3):
+                    i.hp=heal
+                    temp=i.name+" has stabilized!"
+                elif(i.hp<-3):
+                    temp=i.name+" has already died"
+                elif(i.hp+heal>=i.max):
+                    i.hp=i.max
+                    temp=i.name+" heals to max HP"
+                else:
+                    i.hp+=heal
+                    temp = i.name+" heals: "+str(heal)+" points"
+
+        await Interaction.response.send_message(temp)
+
+
+
+        
 #--------------------------------------------------------------------------------------------------
 #poet
     @client.tree.command(name = "poet")
