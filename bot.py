@@ -234,9 +234,12 @@ def run_dis_bot():
         else:
             await Interaction.response.send_message("Tails")
 
-    @client.tree.command(name = "roll",description="rolls a dice of n sides")
-    async def roll(Interaction,sides:int):
-        ans = random.randint(1,sides)
+    @client.tree.command(name = "roll",description="rolls x dice of n sides")
+    async def roll(Interaction,num_of_dice: int,sides:int):
+
+        ans = 0
+        for i in range(num_of_dice):
+            ans += random.randint(1,sides)
         await Interaction.response.send_message(ans)
 
 #games---------------------------------------------------------------------------------------------
@@ -313,11 +316,14 @@ def run_dis_bot():
 
    #display stats and give options
     @client.tree.command(name ="character")
-    async def character(Interaction):
+    async def character(Interaction, member:discord.Member = None):
+        id = Interaction.user.id
+        if member !=None:
+            id = member.id
         pChar = None
         check  = False
         for i in chars:
-            if Interaction.user.id == i.id:
+            if id == i.id:
                 check =True
                 pChar =i
         if check == True:
@@ -350,39 +356,17 @@ def run_dis_bot():
         if hope==fear:
             r1c="CRITICAL: "
 
-        hope2 = random.randint(1,12)
-        fear2 = random.randint(1,12)
-        r2 = hope2+fear2
-        r2c=""
-
-        if hope2==fear2:
-            r2c="CRITICAL: "
+        ad = random.randint(1,6)
         
         x="hope"
-        y="hope"
 
         if hope<fear:
-            x="fear"
-        if hope2<fear2:
-            y="fear"
-
-        multi=[[r1,r2],[x,y],[r1c,r2c]]
-        if r1>r2:
-            multi[0][0]=r2 
-            multi[0][1]=r1
-            multi[1][0]= y
-            multi[1][1]=x     
-            multi[2][0]=r2c
-            multi[2][1]=r1c            
+            x="fear"   
 
         emb = discord.Embed(title="ROLLS:")
         emb.add_field(name ="Normal", value =r1c+ str(r1)+" with "+x)
-        if(not multi[2][0]=="CRITICAL: "):
-            emb.add_field(name = "Advantage",value=multi[2][1]+str(multi[0][1])+" with "+multi[1][1])
-            emb.add_field(name = "Disadvantage",value=multi[2][0]+str(multi[0][0])+" with "+multi[1][0])
-        else:
-            emb.add_field(name = "Advantage",value=multi[2][0]+str(multi[0][0])+" with "+multi[1][0])
-            emb.add_field(name = "Disadvantage",value=multi[2][1]+str(multi[0][1])+" with "+multi[1][1])
+        emb.add_field(name = "Advantage",value=r1c+str(r1+ad)+" with "+x)
+        emb.add_field(name = "Disadvantage",value=r1c+str(r1-ad)+" with "+x)
         
         
 
