@@ -9,7 +9,7 @@ import Player
 from discord import app_commands
 from discord.ext import commands
 
-chars=[Player.player(0,0,0,0,0,0,0,0,0,0,0,0)]
+chars=[Player.player(0,0,0,0,0,0,0,0,0,0,0,0,0)]
 
 async def sendMSG(message, user_message, is_private):
     try:
@@ -269,8 +269,8 @@ def run_dis_bot():
                 num=0
                 for row in f:
                     temp = row.split()
-                    if stats==12:
-                        chars.append(Player.player(0,0,0,0,0,0,0,0,0,0,0,0))
+                    if stats==13:
+                        chars.append(Player.player(0,0,0,0,0,0,0,0,0,0,0,0,0))
                         stats =0
                         num+=1
                     if(stats ==0):
@@ -308,6 +308,8 @@ def run_dis_bot():
                     
                     if(stats==11):
                         chars[num].feat = temp[1]
+                    if(stats ==12):
+                        chars[num].inv = row[11:]
                         
                     stats+=1
         await Interaction.response.send_message("Characters created!")
@@ -327,9 +329,11 @@ def run_dis_bot():
                 check =True
                 pChar =i
         if check == True:
+            
             #view = Character.Character(596818504154611741,Interaction.user.id)
-            emb = discord.Embed(title =pChar.name,description="Feat: "+pChar.feat,colour=discord.Colour.random())
-            emb.set_thumbnail(url=Interaction.user.display_avatar)
+            emb = discord.Embed(title =pChar.name,description="Feats: "+pChar.feat,colour=discord.Colour.random())
+            temp = discord.File(f"pics/{pChar.id}.png",filename=f"{pChar.id}.png")
+            emb.set_thumbnail(url=f"attachment://{pChar.id}.png")
             emb.add_field(name ="HP", value =str(pChar.hp)+" / "+str(pChar.max),inline = False)
             emb.add_field(name ="Agility",value = pChar.agil, inline=True)
             emb.add_field(name="Strength", value = pChar.str,inline=True)
@@ -338,12 +342,72 @@ def run_dis_bot():
             emb.add_field(name="Presence", value = pChar.pres,inline=True)
             emb.add_field(name="Knowledge", value = pChar.know,inline=True)
             emb.add_field(name="Evasion", value = pChar.evas,inline=False)
-            
+            emb.add_field(name ="Inventory",value = pChar.inv, inline = False)
 
-            await Interaction.response.send_message(embed=emb)
+            await Interaction.response.send_message(file = temp, embed=emb)
 
         else:
             await Interaction.response.send_message("You have no character")
+    
+    
+    
+    @client.tree.command(name = "update", description= "update characters")
+    async def update(Interaction):
+        f=open("characters.txt","w")
+        for i in chars[:-1]:
+            f.write(str(i))
+        f.write(str(chars[-1]))
+
+        f.close()
+        await Interaction.response.send_message("Characters updated!")
+
+    
+
+
+    @client.tree.command(name = "inv_add", description = "adds item to the inventory")
+    async def inv_add(Interaction, item:str, member:discord.Member = None):
+        id = Interaction.user.id
+        if member !=None:
+            id = member.id
+        pChar = None
+        check  = False
+        for i in chars:
+            if id == i.id:
+                check =True
+                pChar =i
+        if check == True:
+            pChar.inv = pChar.inv+","+item
+            await Interaction.response.send_message("Item added!")
+        else:
+                await Interaction.response.send_message("Player not found")
+
+    
+    @client.tree.command(name = "inv_rem",description="removes item from inventory")
+    async def inv_rem(Interaction, item:str, member:discord.Member = None):
+        id = Interaction.user.id
+        if member !=None:
+            id = member.id
+        pChar = None
+        check  = False
+        for i in chars:
+            if id == i.id:
+                check =True
+                pChar =i
+        if check == True:
+            temp = pChar.inv.split(',')
+            suc = False
+            for i in range(len(temp)):
+                if temp[i]==item:
+                    temp.pop(i)
+                    suc = True
+                    break
+            pChar.inv = ",".join(temp)
+            if suc == True:
+                await Interaction.response.send_message("Item removed!")
+            else:
+                await Interaction.response.send_message("Item not found")        
+        else:
+            await Interaction.response.send_message("No player found")
 
         
     @client.tree.command(name ="roll_dnd",description="Roll the dice")
@@ -445,7 +509,7 @@ def run_dis_bot():
         username = str(message.author)
         umsg = str(message.content)
         channel = str(message.channel)
-        print(f"{username} said: '{umsg}' ({channel})")
+        #print(f"{username} said: '{umsg}' ({channel})")
 
         if umsg[0]=='?':
             umsg = umsg[1:]
